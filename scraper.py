@@ -1,19 +1,24 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from unidecode import unidecode
+from webdriver_manager.chrome import ChromeDriverManager
 
 def scrape_results():
-    # Configurando o Chrome para rodar em modo headless
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Executa o Chrome em segundo plano
-    chrome_options.add_argument("--no-sandbox")  # Para evitar problemas no ambiente
-    chrome_options.add_argument("--disable-dev-shm-usage")  # Para evitar problemas de memória
-
     # Iniciando o WebDriver
-    driver = webdriver.Chrome(options=chrome_options)
+    chrome_options = Options()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     driver.get("https://www.flashscore.com.br/")
+
+    # Aceitando cookies
+    accept_cookies = driver.find_element(By.XPATH, '//*[@id="onetrust-accept-btn-handler"]')
+    accept_cookies.click()
 
     # Interagindo com a página
     live_matches = driver.find_element(By.XPATH, '//*[@id="live-table"]/div[1]/div/div[2]')

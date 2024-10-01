@@ -2,4 +2,4 @@ Flask
 beautifulsoup4
 selenium
 unidecode
-webdriver-manager
+webdriver_manager
